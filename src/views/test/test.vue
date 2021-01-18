@@ -80,14 +80,14 @@
                     amount3: 12
                 }, {
                     id: '123',
-                    name: '王小虎',
+                    name: '王小刚',
                     amount1: '324',
                     amount2: '1.9',
                     amount3: 9
                 },
                 {
                     id: '221',
-                    name: '王小虎',
+                    name: '王小刚',
                     amount1: '621',
                     amount2: '2.2',
                     amount3: 17
@@ -101,7 +101,7 @@
                 },
                 {
                     id: '222',
-                    name: '王小虎',
+                    name: '王小刚',
                     amount1: '621',
                     amount2: '2.2',
                     amount3: 17
@@ -135,6 +135,12 @@
             },
 
             objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+                // console.log(row)
+                console.log('row=:' + row.name);
+                console.log('column=:' + column.id);
+                console.log('rowIndex=:' + rowIndex);
+                console.log('columnIndex=:' + columnIndex);
+                console.log("==========================")
                 if (columnIndex === 0) {
                     if (rowIndex % 2 === 0) {
                         return {

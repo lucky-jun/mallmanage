@@ -184,19 +184,19 @@
 
 <style scoped>
 /*表格侧边栏，头部不动，主体上下滑动*/
-    /*.el-aside {*/
-    /*    display: block;*/
-    /*    position: absolute;*/
-    /*    left: 0;*/
-    /*    top: 60px;*/
-    /*    bottom: 0;*/
-    /*}*/
-    /*.el-main {*/
-    /*    position: absolute;*/
-    /*    left: 200px;*/
-    /*    right: 0;*/
-    /*    top: 60px;*/
-    /*    bottom: 0;*/
-    /*    overflow-y: scroll;*/
-    /*}*/
+/*    .el-aside {*/
+/*        display: block;*/
+/*        position: absolute;*/
+/*        left: 0;*/
+/*        top: 60px;*/
+/*        bottom: 0;*/
+/*    }*/
+    .el-main {
+        position: absolute;
+        left: 200px;
+        right: 0;
+        top: 60px;
+        bottom: 0;
+        overflow-y: scroll;
+    }
 </style>
