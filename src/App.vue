@@ -1,12 +1,20 @@
 <template>
   <div id="app">
-    <router-view/>
+<!--    <menu>-->
+<!--      <div slot="main">-->
+        <router-view/>
+<!--      </div>-->
+<!--    </menu>-->
   </div>
 </template>
 
 <script>
+  import Menu from "./components/Menu";
   export default {
-    name: "app"
+    name: "app",
+    components:{
+      Menu
+    }
   }
 </script>
 
