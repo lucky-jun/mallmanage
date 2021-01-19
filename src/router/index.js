@@ -14,6 +14,12 @@ const UserManage = ()=>import('views/UserManage/userManage')
 const GoodsAll = ()=>import('views/goods/goodsAll')
 const AddNewGoods = ()=>import('views/goods/addNewGoods')
 
+//提示
+//网络有问题
+const NetWorkError = ()=>import('views/Tips/NetWorkError')
+//请求超时
+const TimeOut = ()=>import('views/Tips/Timeout')
+
 //测试
 const Test = ()=>import('../views/test/test')
 
@@ -63,6 +69,14 @@ const routes = [
         component:Test
       },
     ]
+  },
+  {
+    path: '/netWorkError',
+    component:NetWorkError
+  },
+  {
+    path: '/timeout',
+    component:TimeOut
   },
 
 ]
