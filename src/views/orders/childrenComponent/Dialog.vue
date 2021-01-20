@@ -88,12 +88,34 @@
             Submit(){
                 console.log("点击了提交")
                 console.log(this.form.address)
-                this.$emit("dialogState",false)
+                console.log(this.addressRules)
+                if(this.addressRules){
+                    this.$emit("dialogState",false)
+                    //请求修改axios
+                    this.$message({
+                        type:"success",
+                        message:"修改成功"
+                    })
+                }else{
+                    this.$message({
+                        type:"error",
+                        message:"地址不能为空！"
+                    })
+                }
             },
             //取消按钮
             Cancel(){
                 console.log("点击了取消")
                 this.$emit("dialogState",false)
+            }
+        },
+        components:{
+            addressRules(){
+                if(this.form.address != ''){
+                    return true
+                }else{
+                    return false
+                }
             }
         }
     }
