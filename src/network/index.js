@@ -29,7 +29,7 @@ export function request(config){
         //只返回res.data中的数据
         return res.data
     },error => {
-        console.log('axios响应时拦截失败'+error)
+        console.log('axios响应时失败'+error)
         console.log(error)
         console.log(error.message.toString())
         // console.log(error.message.toString().substring(0,error.message.toString().length-18))

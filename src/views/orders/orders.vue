@@ -8,6 +8,7 @@
             tooltip-effect="dark"
             :height="tableHeight"
             :span-method="objectSpanMethod"
+            empty-text="暂无任何订单"
     >
         <el-table-column
                 label="订单ID"
@@ -230,10 +231,17 @@
                 this.dialogVisible = val
             },
             //弹窗层 End
+            //发货
             handleDelivering(index, row) {
                 // console.log(index, row);
+                //获取合并的数据
+                // for(let i = 0;i<this.spanArr[index];i++){
+                //     console.log(this.tableData[index+i])
+                // }
+                //获取合并的数据 END
                 request({
                     url:'updataOrderToDelivering.do',
+                    method:'post',
                     data:{
                         //订单ID
                         orderId:row.ord_id,
@@ -242,15 +250,23 @@
                     }
                 }).then(res=>{
                     console.log("界面请求成功："+res)
-                    // if(res == 'Network Error'){
-                    //     this.router.push('/netWorkError')
-                    // }else if(res.toString().substring(0,res.toString().length-18) == 'timeout'){
-                    //     this.$router.push('/timeout')
-                    // }else{
-                    //     console.log('其它请求错误')
-                    // }
+                    if(res.flag){
+                        this.$message({
+                            type:"success",
+                            message:"发货成功"
+                        })
+                    }else{
+                        this.$message({
+                            type:"error",
+                            message:"发货失败，请重试！"
+                        })
+                    }
                 }).catch(err=>{
                     console.log("界面请求失败："+err)
+                    this.$message({
+                        type:"error",
+                        message:"发货失败，请重试！"
+                    })
                 })
             },
             //修改
@@ -271,7 +287,21 @@
                         employeeId:10
                     }
                 }).then(res=>{
-                    console.log("界面请求成功："+res)
+                    console.log("返回界面的数值"+res)
+                    if(res.flag){
+                        this.$message({
+                            type:"success",
+                            message:"删除成功"
+                        })
+                        setTimeout(()=>{
+                            this.$router.go(0)
+                        },500)
+                    }else{
+                        this.$message({
+                            type:"error",
+                            message:"删除失败，请重试！"
+                        })
+                    }
                 }).catch(err=>{
                     console.log("界面请求失败："+err)
                 })
@@ -329,6 +359,20 @@
             //合并行 End
         },
         created() {
+            console.log("创建")
+            //请求数据
+            request({
+                url:'/queryMyOrderAll.do',
+                method:'post'
+            }).then(res=>{
+                console.log(res)
+                if(res.flag){
+                    this.tableData = res.data
+                }else{
+                }
+            }).catch(err=>{
+                console.log("查询有误")
+            })
             this.rowspan()
         }
     }

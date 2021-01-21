@@ -45,6 +45,8 @@
 </template>
 
 <script>
+    import {request} from "../../../network";
+
     export default {
         name: "Dialog",
         props:{
@@ -87,14 +89,30 @@
             //提交按钮
             Submit(){
                 console.log("点击了提交")
-                console.log(this.form.address)
-                console.log(this.addressRules)
                 if(this.addressRules){
                     this.$emit("dialogState",false)
                     //请求修改axios
-                    this.$message({
-                        type:"success",
-                        message:"修改成功"
+                    request({
+                        url:'updataOrderToAddress.do',
+                        method:'post',
+                        data:{
+                            ord_id:this.orderInf.ord_id,
+                            ord_useradd:this.form.address
+                        }
+                    }).then(res=>{
+                        console.log("返回值："+res)
+                        if(res.flag){
+                            this.$message({
+                                type:"success",
+                                message:"修改成功"
+                            })
+                            this.$emit("dialogState",false)
+                        }else{
+                            this.$message({
+                                type:"error",
+                                message:"修改失败，请重试！"
+                            })
+                        }
                     })
                 }else{
                     this.$message({
@@ -109,7 +127,7 @@
                 this.$emit("dialogState",false)
             }
         },
-        components:{
+        computed:{
             addressRules(){
                 if(this.form.address != ''){
                     return true
