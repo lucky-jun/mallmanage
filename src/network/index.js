@@ -24,7 +24,8 @@ export function request(config){
     })
     //响应时拦截，对返回的数据进行拦截
     instance.interceptors.response.use(res=>{
-        console.log('axios拦截到的响应返回的后端数据：' + res);
+        console.log('axios拦截到的响应返回的后端数据：' );
+        console.log(res);
 
         //只返回res.data中的数据
         return res.data

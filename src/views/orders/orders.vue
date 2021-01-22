@@ -8,7 +8,7 @@
             tooltip-effect="dark"
             :height="tableHeight"
             :span-method="objectSpanMethod"
-            empty-text="暂无任何订单"
+            empty-text="暂无任何订单(未搜索到订单)"
     >
         <el-table-column
                 label="订单ID"
@@ -62,15 +62,18 @@
                 label="下单时间"
                 sortable
                 prop="ord_createtime"
+                :formatter="dateForma"
         >
         </el-table-column>
         <el-table-column
                 align="right">
             <template slot="header" slot-scope="scope">
                 <el-input
-                        v-model="search"
+                        v-model="search123"
                         size="mini"
-                        placeholder="输入关键字搜索"/>
+                        placeholder="输入用户名关键字搜索"
+                        @keyup.enter.native="queryInput()"
+                />
             </template>
             <template slot-scope="scope">
                 <el-button
@@ -96,118 +99,18 @@
 <script>
     import {request} from "network";
     import Dialog from "./childrenComponent/Dialog";
+
+    import moment from 'moment'
+
     export default {
         name: "goodsManage",
         data() {
             return {
-                tableData: [
-                    {
-                        ord_id: '1111',
-                        ord_username: '张三',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
-                        ord_goodsid: 12,
-                        ord_goodsname: 'IPhone 11',
-                        ord_goodsnumber: 2,
-                        ord_sumprice:2999.00,
-                        ord_paystate:'等待支付',
-                        ord_orderstate:'等待支付',
-                        ord_createtime:'2020-12-22 12:12:36',
-                    },
-                    {
-                        ord_id: '222222',
-                        ord_username: '李四',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄',
-                        ord_goodsid: 12,
-                        ord_goodsname: 'iPhone 11 Pro',
-                        ord_goodsnumber: 2,
-                        ord_sumprice:2999.00,
-                        ord_paystate:'已支付',
-                        ord_orderstate:'等待发货',
-                        ord_createtime:'2020-12-22 15:12:36',
-                    },
-                    {
-                        ord_id: '33333',
-                        ord_username: '王五',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄',
-                        ord_goodsnumber: 2,
-                        ord_goodsid: 12,
-                        ord_goodsname: 'iPhone 11 Pro Max',
-                        ord_sumprice:2999.00,
-                        ord_paystate:'等待支付',
-                        ord_orderstate:'等待支付',
-                        ord_createtime:'2020-12-20 12:12:36',
-                    },
-                    {
-                        ord_id: '4444',
-                        ord_username: '老六',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄',
-                        ord_goodsid: 12,
-                        ord_goodsname: 'iPhone XR',
-                        ord_goodsnumber: 2,
-                        ord_sumprice:2999.00,
-                        ord_paystate:'已支付',
-                        ord_orderstate:'等待发货',
-                        ord_createtime:'2020-12-24 12:12:36',
-                    },
-                    {
-                        ord_id: '55555',
-                        ord_username: '老七',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄',
-                        ord_goodsid: 12,
-                        ord_goodsname: 'IPhone 12 Mini',
-                        ord_goodsnumber: 2,
-                        ord_sumprice:2999.00,
-                        ord_paystate:'等待支付',
-                        ord_orderstate:'等待支付',
-                        ord_createtime:'2020-12-20 12:12:36',
-                    },
-                    {
-                        ord_id: '55555',
-                        ord_username: '老七',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄',
-                        ord_goodsid: 12,
-                        ord_goodsname: 'IPhone 12 Mini',
-                        ord_goodsnumber: 2,
-                        ord_sumprice:2999.00,
-                        ord_paystate:'等待支付',
-                        ord_orderstate:'等待支付',
-                        ord_createtime:'2020-12-20 12:12:36',
-                    },                    {
-                        ord_id: '4444',
-                        ord_username: '老六',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄',
-                        ord_goodsid: 12,
-                        ord_goodsname: 'iPhone Xs Max',
-                        ord_goodsnumber: 2,
-                        ord_sumprice:2999.00,
-                        ord_paystate:'已支付',
-                        ord_orderstate:'等待发货',
-                        ord_createtime:'2020-12-24 12:12:36',
-                    },                    {
-                        ord_id: '4444',
-                        ord_username: '老六',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄',
-                        ord_goodsid: 12,
-                        ord_goodsname: 'iPhone XR',
-                        ord_goodsnumber: 2,
-                        ord_sumprice:2999.00,
-                        ord_paystate:'已支付',
-                        ord_orderstate:'等待发货',
-                        ord_createtime:'2020-12-24 12:12:36',
-                    },                    {
-                        ord_id: '4444',
-                        ord_username: '老六',
-                        ord_useradd:'上海市普陀区金沙江路 1518 弄',
-                        ord_goodsid: 12,
-                        ord_goodsname: 'iPhone Xs',
-                        ord_goodsnumber: 2,
-                        ord_sumprice:2999.00,
-                        ord_paystate:'已支付',
-                        ord_orderstate:'等待发货',
-                        ord_createtime:'2020-12-24 12:12:36',
-                    },
-                ],
+                tableData: [],
+                tableDataInputQuery: [],
+                tableDataOld: [],
                 search: '',
+                search123: '',
                 tableHeight: 640,//表格高度
                 timeScreenData:[],//时间筛选
                 spanArr:[],//合并行
@@ -223,6 +126,43 @@
         computed:{
             // 时间过滤器
             timeScreen() {
+            }
+        },
+        watch:{
+          tableData(val,old){
+              // console.log("11111111111")
+              // console.log(val)
+              // console.log(val[1])
+              // let a = Object.assign({},val)
+              // console.log(a)
+              // console.log(a[6])
+              //
+              // let arr =[]
+              // arr = a[6]
+              // arr.concat(a[10])
+              // // arr.push(a)
+              //
+              // console.log("2222222222222222")
+              // console.log(arr)
+              // console.log(old)
+              // console.log(this.tableData)
+              // console.log("val")
+              // console.log(val)
+              // let resdata=JSON.parse(JSON.stringify(val));
+              // this.tableData.push(a)
+              // console.log("123123")
+              // console.log(this.tableData)
+          },
+            search123(val,oldval){
+              console.log("新："+val)
+              console.log(val)
+              console.log("旧："+oldval)
+              console.log("判断："+val===undefined)
+                // this.rowspan()
+                if(val==""){
+                    this.tableData = this.tableDataOld
+                    this.search = ""
+                }
             }
         },
         methods: {
@@ -330,6 +270,10 @@
                         //让下一行ID与上一行ID作比较,当两个ID一致时合并
                         // if(this.tableData[index].id === this.tableData[index-1].id ){
                         //让下一行ID与上一行ID并且让下一行的name和上一行的name比较,当两个都通过时进行合并
+                        console.log("this.tableData[index].ord_id1:"+this.tableData[index].ord_id)
+                        console.log("this.tableData[index].ord_id2:"+this.tableData[index-1].ord_id)
+                        console.log("this.tableData[index].ord_username1:"+this.tableData[index].ord_username)
+                        console.log("this.tableData[index].ord_username2:"+this.tableData[index-1].ord_username)
                         if(this.tableData[index].ord_id === this.tableData[index-1].ord_id && this.tableData[index].ord_username == this.tableData[index-1].ord_username){
                             this.spanArr[this.position] += 1 //如果下一行与上一行相同，那么spanArr(要合并的数据行)增加一行
                             this.spanArr.push(0) //当前行不显示，因为与上一行相同
@@ -357,6 +301,37 @@
                 }
             },
             //合并行 End
+            dateForma(row,column){
+
+                const date = row[column.property];
+
+                if(date == undefined){return ''};
+
+                return moment(date).format("YYYY-MM-DD HH:mm:ss")
+            },
+            queryInput(){
+                console.log("准备搜索")
+                console.log(this.search123)
+                this.tableDataOld = this.tableData
+                request({
+                    url:'/queryOrderByUserName.do',
+                    method:'post',
+                    data:{
+                        ord_username:this.search123
+                    }
+                }).then(res=>{
+                    console.log(res.data)
+                    if(res.flag){
+                        this.tableData = res.data
+                        this.rowspan()
+                    }else{
+                        this.tableData = []
+                    }
+                }).catch(err=>{
+                    console.log(err)
+                    console.log("搜索有问题")
+                })
+            }
         },
         created() {
             console.log("创建")
@@ -365,15 +340,24 @@
                 url:'/queryMyOrderAll.do',
                 method:'post'
             }).then(res=>{
+                console.log("订单界面")
                 console.log(res)
+                console.log("转换后Data")
+                // let resdata=JSON.parse(JSON.stringify(res.data));
+                // console.log("运行记录组件接到的数据",resdata);
+                // console.log(resdata);
+                // console.log(resdata[6]);
                 if(res.flag){
                     this.tableData = res.data
+                    this.rowspan()
                 }else{
                 }
             }).catch(err=>{
                 console.log("查询有误")
             })
-            this.rowspan()
+        },
+        filters:{
+
         }
     }
 </script>
