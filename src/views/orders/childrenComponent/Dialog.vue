@@ -93,11 +93,10 @@
                     this.$emit("dialogState",false)
                     //请求修改axios
                     request({
-                        url:'updataOrderToAddress.do',
+                        url:'/updateOrderToAddress.do',
                         method:'post',
                         data:{
-                            ord_id:this.orderInf.ord_id,
-                            ord_useradd:this.form.address
+                            orderInf:this.newOrderInf
                         }
                     }).then(res=>{
                         console.log("返回值："+res)
@@ -134,6 +133,10 @@
                 }else{
                     return false
                 }
+            },
+            newOrderInf(){
+                this.orderInf.ord_useradd = this.form.address
+                return this.orderInf
             }
         }
     }

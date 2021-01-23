@@ -8,6 +8,8 @@
             tooltip-effect="dark"
             :height="tableHeight"
             :span-method="objectSpanMethod"
+            v-loading="loading"
+            @sort-change="changeSort"
             empty-text="暂无任何订单(未搜索到订单)"
     >
         <el-table-column
@@ -80,14 +82,14 @@
                         size="mini"
                         type="primary"
                         :loading="false"
-                        @click="handleDelivering(scope.$index, scope.row)" :disabled="btntext(scope.row.ord_paystate)">发货</el-button>
+                        @click="handleDelivering(scope.$index, scope.row)" :disabled="btntext(scope.row.ord_paystate,scope.row.ord_orderstate)">发货</el-button>
                 <el-button
                         size="mini"
                         @click="handleEdit(scope.$index, scope.row)">修改</el-button>
                 <el-button
                         size="mini"
                         type="danger"
-                        @click="handleDelete(scope.$index, scope.row)" :disabled="btntext(scope.row.ord_paystate)">删除</el-button>
+                        @click="handleDelete(scope.$index, scope.row)" :disabled="false">取消</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -116,8 +118,8 @@
                 spanArr:[],//合并行
                 position:0,//合并行标识
                 dialogVisible:false, //弹出成dialog状态
-                orderInf:{}
-
+                orderInf:{},
+                loading:true
             }
         },
         components:{
@@ -154,14 +156,15 @@
               // console.log(this.tableData)
           },
             search123(val,oldval){
-              console.log("新："+val)
+              console.log("新："+val.length)
               console.log(val)
               console.log("旧："+oldval)
               console.log("判断："+val===undefined)
                 // this.rowspan()
-                if(val==""){
+                if(val.length==0){
                     this.tableData = this.tableDataOld
-                    this.search = ""
+                    this.spanArr = []
+                    this.rowspan()
                 }
             }
         },
@@ -180,7 +183,7 @@
                 // }
                 //获取合并的数据 END
                 request({
-                    url:'updataOrderToDelivering.do',
+                    url:'/updateOrderToDelivering.do',
                     method:'post',
                     data:{
                         //订单ID
@@ -219,10 +222,10 @@
             handleDelete(index, row) {
                 // console.log(index, row);
                 request({
-                    url:'DeleteOrderToDelivering.do',
+                    url:'/DeleteOrderToDelivering.do',
                     data:{
                         //订单ID
-                        orderId:row.ord_id,
+                        ord_id:row.ord_id,
                         //操作员编号
                         employeeId:10
                     }
@@ -231,7 +234,7 @@
                     if(res.flag){
                         this.$message({
                             type:"success",
-                            message:"删除成功"
+                            message:"取消订单成功"
                         })
                         setTimeout(()=>{
                             this.$router.go(0)
@@ -239,19 +242,23 @@
                     }else{
                         this.$message({
                             type:"error",
-                            message:"删除失败，请重试！"
+                            message:"取消订单失败，请重试！"
                         })
                     }
                 }).catch(err=>{
                     console.log("界面请求失败："+err)
                 })
             },
-            btntext(ord_paystate){
+            btntext(ord_paystate,ord_orderstate){
                 // console.log(ord_paystate)
-                if(ord_paystate!='已发货'){
+                if(ord_paystate!='支付成功'){
                     return false
                 }else{
-                    return true
+                    if(ord_orderstate!="等待发货"){
+                        return false
+                    }else{
+                        return true
+                    }
                 }
             },
             filterHandler(value, row, column) {
@@ -263,6 +270,8 @@
             rowspan(){
                 //循环遍历获取tableData数组中的数据，item：一个数据元素，index：数据下标
                 this.tableData.forEach((item,index)=>{
+                    console.log(item)
+                    console.log(this.spanArr)
                     if(index == 0){
                         this.spanArr.push(1) //里面无数据，第一行先占一行
                         this.position = 0 //给第一行索引为0
@@ -323,7 +332,9 @@
                     console.log(res.data)
                     if(res.flag){
                         this.tableData = res.data
+                        this.spanArr = []
                         this.rowspan()
+                        console.log(this.spanArr)
                     }else{
                         this.tableData = []
                     }
@@ -331,6 +342,15 @@
                     console.log(err)
                     console.log("搜索有问题")
                 })
+            },
+            changeSort(val){
+                // console.log("==-=-=-=-=-=-=:"+this.spanArr);
+                console.log(val)
+                console.log(this.tableData);
+                console.log(this.$ref);
+                // console.log(this.$ref)
+                // this.spanArr = []
+                // this.rowspan()
             }
         },
         created() {
@@ -355,6 +375,7 @@
             }).catch(err=>{
                 console.log("查询有误")
             })
+            this.loading = false
         },
         filters:{
 
