@@ -136,8 +136,9 @@
 
             objectSpanMethod({ row, column, rowIndex, columnIndex }) {
                 // console.log(row)
+                console.log('row=:' + row.id);
                 console.log('row=:' + row.name);
-                console.log('column=:' + column.id);
+                console.log('column=:' + column);
                 console.log('rowIndex=:' + rowIndex);
                 console.log('columnIndex=:' + columnIndex);
                 console.log("==========================")
