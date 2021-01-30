@@ -162,6 +162,8 @@
               console.log("判断："+val===undefined)
                 // this.rowspan()
                 if(val.length==0){
+                    console.log(this.tableData);
+                    console.log(this.tableDataOld);
                     this.tableData = this.tableDataOld
                     this.spanArr = []
                     this.rowspan()
@@ -252,9 +254,14 @@
             btntext(ord_paystate,ord_orderstate){
                 // console.log(ord_paystate)
                 if(ord_paystate!='支付成功'){
-                    return false
+                    console.log("-------------:"+ord_paystate);
+                    console.log("+++++++++++++:"+ord_orderstate);
+                    return true
                 }else{
-                    if(ord_orderstate!="等待发货"){
+                    console.log("11111111111111:"+ord_paystate);
+                    console.log("22222222222222:"+ord_orderstate);
+                    console.log(ord_orderstate=="等待发货");
+                    if(ord_orderstate=="等待发货"){
                         return false
                     }else{
                         return true
