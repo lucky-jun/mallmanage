@@ -200,6 +200,7 @@
                             type:"success",
                             message:"发货成功"
                         })
+                        this.$router.go(0)
                     }else{
                         this.$message({
                             type:"error",
@@ -223,8 +224,11 @@
             //删除
             handleDelete(index, row) {
                 // console.log(index, row);
+                console.log("hjjjjjjjjjjjjjjjjj");
+
                 request({
                     url:'/DeleteOrderToDelivering.do',
+                    method:"post",
                     data:{
                         //订单ID
                         ord_id:row.ord_id,

@@ -46,6 +46,7 @@
 
 <script>
     import {request} from "../../../network";
+    import {MessageBox} from "element-ui";
 
     export default {
         name: "Dialog",
@@ -96,16 +97,28 @@
                         url:'/updateOrderToAddress.do',
                         method:'post',
                         data:{
-                            orderInf:this.newOrderInf
+                            order_id:this.orderInf.ord_id,
+                            newAddress:this.form.address
                         }
                     }).then(res=>{
                         console.log("返回值："+res)
                         if(res.flag){
-                            this.$message({
+                            // this.$message({
+                            //     type:"success",
+                            //     message:"修改成功"
+                            // })
+                            MessageBox.alert("修改成功","提示",{
                                 type:"success",
-                                message:"修改成功"
+                                confirmButtonText: '确认',
+                                callback: action => {
+                                    this.$emit("dialogState",false)
+                                    this.$router.go(0)
+                                }
                             })
-                            this.$emit("dialogState",false)
+                            setTimeout(()=>{
+                                this.$emit("dialogState",false)
+                                this.$router.go(0)
+                            },700)
                         }else{
                             this.$message({
                                 type:"error",
