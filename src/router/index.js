@@ -83,6 +83,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
+  // mode: 'hash',//打包时使用，但会有#符号
   base: process.env.BASE_URL,
   routes
 })

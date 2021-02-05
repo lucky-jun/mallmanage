@@ -41,7 +41,7 @@
                     <!--logo-->
                     <el-menu-item index="/index" d>
 <!--                        <img src="https://img10.360buyimg.com/img/jfs/t1/159353/17/2928/457625/5ffd107fE2b4a7a10/e0ab266497850f64.gif"-->
-                        <img src="@/assets/Logo.gif"
+                        <img src="@/assets/Logo.png"
                             height="100%"
                              width="100%"
                         ></img>

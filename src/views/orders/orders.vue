@@ -220,6 +220,7 @@
                 console.log(row)
                 this.orderInf = row
                 this.dialogVisible = true
+                // this.$router.go(0)
             },
             //删除
             handleDelete(index, row) {
